@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% load user_filters %}
+
+{% block title %}
+  Пост {{ post|truncatewords:30 }}
+{% endblock %}
+
+{% block content %}
+<div class="container py-2"> 
+<div class="row">
+  <aside class="col-12 col-md-4">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small class="text-body-secondary">
+          Дата публикации: 
+        </small>
+          <span>
+            {{ post.pub_date|date:'d E Y' }}
+          </span>
+      </li>
+      {% if post.group %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small class="text-body-secondary">
+          Группа: 
+        </small>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'posts:group_list' post.group.slug %}" role="button">
+          все записи группы
+        </a>
+        <span>
+          {{ post.group }}
+        </span>
+      </li>
+      {% endif %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small class="text-body-secondary">
+          Автор: 
+        </small>
+        <span>
+          {{ post.author.get_full_name }}
+        </span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small class="text-body-secondary">
+          Всего постов автора: 
+        </small>
+        <span>
+          {{ post_count }}
+        </span>
+      </li>
+      <li class="list-group-item">
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'posts:profile' post.author %}" role="button">
+          все посты пользователя
+        </a>
+      </li>
+    </ul>
+  </aside>
+  
+  <article class="col-12 col-md-8">
+    <p>
+    {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+      <img class="card-img my-2" src="{{ im.url }}">
+    {% endthumbnail %}
+    </p>
+    <p>
+      {{ post.text }}
+    </p>
+    {% if post.author == request.user %}
+    <p>
+      <a class="btn btn-primary" href="{% url 'posts:post_edit' post.id %}" role="button">
+        Редактировать пост
+      </a>
+    </p>
+    {% endif %}
+    {% if user.is_authenticated %}
+  <div class="card my-4">
+    <h6 class="card-header">Добавить комментарий:</h6>
+    <div class="card-body">
+      <form method="post" action="{% url 'posts:add_comment' post.id %}">
+        {% csrf_token %}      
+        <div class="form-group mb-2">
+          {{ form.text|addclass:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+  </article>
+<h5>Комментарии пользователей:</h5>
+{% for comment in comments %}
+<div class="card p-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="user d-flex flex-row align-items-center">
+      {% comment %} <img src="@" width="30" class="user-img rounded-circle mr-2"  href="{% url 'posts:profile' post.author %}"> {% endcomment %}
+      <span>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'posts:profile' post.author %}" role="button">
+          @{{ comment.author.username }}
+        </a>
+        <small class="font-weight-bold text-primary">
+          {{ comment.author.get_full_name }}
+        </small> 
+        <small class="font-weight-bold">
+          {{ comment.text }}
+        </small>
+      </span>
+    </div>
+    <div class="sub_div">
+      <small>
+        {{ comment.created|date:'H:i' }}
+      </small>
+      <small class="text-body-secondary">
+        {{ comment.created|date:'d E Y' }}
+      </small>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

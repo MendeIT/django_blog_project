@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Custom 404
+{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+  <h1>Custom 404</h1>
+  <p class="lead">
+    Страницы с адресом {{ path }} не существует
+  </p>
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'posts:index' %}" role="button">
+    Вернуться на главную страницу
+  </a>
+</div>
+{% endblock %}
