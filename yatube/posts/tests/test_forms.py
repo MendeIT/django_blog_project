@@ -162,12 +162,12 @@ class TestViewImage(TestCase):
         """
         post_count = Post.objects.count()
         small_gif = (
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         uploaded = SimpleUploadedFile(
             name='small.gif',
@@ -196,8 +196,8 @@ class TestViewImage(TestCase):
         first_post_group_list = response_group_list.context['page_obj'][0]
 
         response_post_detail = self.client.get(reverse(
-                'posts:post_detail', kwargs={'post_id': new_post.pk}
-            ))
+            'posts:post_detail', kwargs={'post_id': new_post.pk}
+        ))
         post_detail = response_post_detail.context['post']
 
         self.assertEqual(Post.objects.count(), post_count + 1)
@@ -246,8 +246,8 @@ class СommetCreateFormTests(TestCase):
         )
 
         self.assertRedirects(response, reverse(
-                'posts:post_detail', kwargs={'post_id': self.post.id}
-            ))
+            'posts:post_detail', kwargs={'post_id': self.post.id}
+        ))
         self.assertEqual(self.post.comments.count(), comment_count + 1)
         self.assertTrue(
             self.post.comments.filter(text=form_data['text']).exists()
