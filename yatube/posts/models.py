@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
+from django.db.models import UniqueConstraint
 
 User = get_user_model()
 TEXT_LIMIT_FOR_STR = 15
@@ -102,3 +103,7 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+        UniqueConstraint(
+            fields=['author', 'user'],
+            name='author_user_unique'
+        )

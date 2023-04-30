@@ -2,13 +2,19 @@
 {% load thumbnail %}
 
 {% block title %}
-  Профайл пользователя {{ author.get_full_name }}
+  Профайл пользователя {{ author.get_full_name }} 
+  
 {% endblock %}
 
 {% block content %}
 <div class="container py-2">
   <h1>Все посты пользователя {{ author.get_full_name }}</h1>
+  <h6>nickname: {{ author.username }}</h6>
   <h3>Всего постов: {{ post_count }}</h3>
+  <h5>Подписчиков: {{ author.following.count }}</h5>
+  <h5>Подписан: {{ author.follower.count }}</h5>
+  <hr>
+  {% if author != request.user %}
   {% if following %}
   <div class="mb-5">
     <a class="btn btn-lg btn-light" href="{% url 'posts:profile_unfollow' author.username %}" role="button">
@@ -19,17 +25,15 @@
       Подписаться
     </a>
   {% endif %}
+  {% endif %}
   <p>
   {% for post in page_obj %}
   <article>
     <p class="fw-semibold">
-      <small class="text-body-secondary">
-        Автор:
+      <small class="font-weight-bold text-primary">
+        {{ post.author.get_full_name }}
       </small>
-      {{ post.author.username }}
-      <a class="btn btn-outline-primary btn-sm" href="{% url 'posts:profile' post.author %}" role="button">
-        все посты пользователя
-      </a>
+      
     </p>
     <p>
       {% thumbnail post.image "960x339" crop="center" upscale=True as im %}

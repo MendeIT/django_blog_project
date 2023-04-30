@@ -1,10 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.views.decorators.cache import cache_page
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Post, Group, User, Follow
-from .forms import PostForm, CommentForm
+from posts.forms import CommentForm, PostForm
+from posts.models import Group, Follow, Post, User
 
 NUMBER_OF_POST_ON_PAGES = 10
 
@@ -19,7 +19,7 @@ def paginator(request, post_list):
 @cache_page(20, key_prefix='index_page')
 def index(request):
     template = 'posts/index.html'
-    post_list = Post.objects.all()
+    post_list = Post.objects.select_related('group').all()
     context = {
         'page_obj': paginator(request, post_list),
     }
@@ -42,13 +42,14 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     all_posts_user = author.posts.all()
     post_count = author.posts.count()
-    following = author.following.exists()
     context = {
         'author': author,
         'page_obj': paginator(request, all_posts_user),
         'post_count': post_count,
-        'following': following
     }
+    if request.user.is_authenticated:
+        following = author.following.filter(user=request.user).exists()
+        context['following'] = following
     return render(request, template, context)
 
 
