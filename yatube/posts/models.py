@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import UniqueConstraint
 
 User = get_user_model()
 TEXT_LIMIT_FOR_STR = 15
