@@ -1,11 +1,9 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 
 from posts.models import Group, Post
 
 User = get_user_model()
-
-# У меня нет в models.py - help_text, он расположен в forms.py
 
 
 class PostModelTest(TestCase):

@@ -17,6 +17,9 @@
       {% endthumbnail %}
     </p>
     <p class="fw-semibold">
+      <small class="font-weight-bold text-primary">
+        {{ post.author.get_full_name }}
+      </small>
       <a class="btn btn-outline-primary btn-sm" href="{% url 'posts:profile' post.author %}" role="button">
         @{{ post.author.username }}
       </a>
