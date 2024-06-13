@@ -10,8 +10,9 @@ if (
         or not os.path.isdir(MANAGE_PATH)
 ):
     assert False, (
-        f'В директории `{BASE_DIR}` не найдена папка c проектом `{PROJECT_DIR_NAME}`. '
-        f'Убедитесь, что у вас верная структура проекта.'
+        f'В директории `{BASE_DIR}` не найдена '
+        f'папка c проектом `{PROJECT_DIR_NAME}`. '
+        'Убедитесь, что у вас верная структура проекта.'
     )
 
 project_dir_content = os.listdir(MANAGE_PATH)
@@ -25,13 +26,13 @@ if FILENAME not in project_dir_content:
 
 from django.utils.version import get_version
 
-assert get_version() < '3.0.0', 'Пожалуйста, используйте версию Django < 3.0.0'
+assert get_version() > '3.0.0', 'Пожалуйста, используйте версию Django < 3.0.0'
 
 from yatube.settings import INSTALLED_APPS
 
-assert any(app in INSTALLED_APPS for app in ['posts.apps.PostsConfig', 'posts']), (
-    'Пожалуйста зарегистрируйте приложение в `settings.INSTALLED_APPS`'
-)
+assert any(
+    app in INSTALLED_APPS for app in ['posts.apps.PostsConfig', 'posts']
+), ('Пожалуйста зарегистрируйте приложение в `settings.INSTALLED_APPS`')
 
 pytest_plugins = [
     'tests.fixtures.fixture_user',

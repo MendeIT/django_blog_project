@@ -184,7 +184,7 @@ class TestViewImage(TestCase):
             data=form_data,
             follow=True
         )
-        new_post = Post.objects.latest(field_name='pub_date')
+        new_post = Post.objects.latest('pub_date')
 
         response_index = self.client.get(self.url['index'])
         first_post_index = response_index.context['page_obj'][0]
